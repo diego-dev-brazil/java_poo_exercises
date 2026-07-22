@@ -47,8 +47,8 @@ public class Worker {
 		this.baseSalary = baseSalary;
 	}
 
-	public Departments getDepartment() {
-		return department;
+	public String getDepartment() {
+		return department.getName();
 	}
 
 	public void setDepartment(Departments department) {
@@ -57,11 +57,25 @@ public class Worker {
 
 	public List<HourContract> getContracts() {
 		return contracts;
+	}	
+	public void addContract (HourContract contract) {
+		contracts.add(contract);
 	}
-
-	public void setContracts(List<HourContract> contracts) {
-		this.contracts = contracts;
+	public void removeContract (HourContract contract) {
+		contracts.remove(contract);
 	}
-	
-	
+	public double income(int year, int month) {
+		double sum = baseSalary;
+		
+		for (HourContract x : contracts) {
+			
+			int x_year = x.getDate().getYear();
+			int x_month = x.getDate().getMonthValue();
+			
+			if(year == x_year && month == x_month) {
+				sum += x.totalValue();
+			}
+		}
+		return sum;
+	}
 }
