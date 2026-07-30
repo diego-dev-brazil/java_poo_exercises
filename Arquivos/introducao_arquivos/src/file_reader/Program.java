@@ -7,13 +7,10 @@ import java.io.IOException;
 public class Program {
 
 	public static void main(String[] args) {
-		String path = "C:\\temp\\arquivo.txt";
-		FileReader fr = null;
-		BufferedReader br = null;
+		String path = "//home//diegodevkoga//Documents//temp//bunda.txt";
 		
-		try {
-			fr = new FileReader(path);
-			br = new BufferedReader(fr);
+		
+		try (BufferedReader br = new BufferedReader(new FileReader (path))){
 			
 			String line = br.readLine();
 			
