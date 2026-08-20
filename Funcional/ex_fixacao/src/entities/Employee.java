@@ -1,0 +1,49 @@
+package entities;
+
+public class Employee implements Comparable<Employee>{
+	private String name;
+	private String email;
+	private Double price;
+	
+	public Employee() {
+		
+	}
+	
+	public Employee(String name, String email, Double price) {
+		this.name = name;
+		this.email = email;
+		this.price = price;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public Double getPrice() {
+		return price;
+	}
+
+	public void setPrice(Double price) {
+		this.price = price;
+	}
+
+	@Override
+	public int compareTo(Employee o) {
+		email.compareTo(o.getEmail());
+		return 0;
+	}
+	
+	
+}
