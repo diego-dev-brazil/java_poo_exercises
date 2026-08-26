@@ -1,13 +1,11 @@
 package application;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 import db.DB;
-import db.DbException;
 
 public class Program {
 	public static void main(String[] args) {
@@ -28,8 +26,8 @@ public class Program {
 			e.printStackTrace();
 		}
 		finally {
-			rs.close();
-			st.close();
+			DB.closeResultSet(rs);
+			DB.closeStatement(st);
 			DB.closeConnection();
 		}
 	}
