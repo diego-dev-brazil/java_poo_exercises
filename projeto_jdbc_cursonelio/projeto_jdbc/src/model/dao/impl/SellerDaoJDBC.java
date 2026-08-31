@@ -30,38 +30,57 @@ public class SellerDaoJDBC implements SellerDao {
 		ResultSet rs = null;
 
 		try {
-			st = conn.prepareStatement("INSERT INTO seller\n"
-					+ "		(Name, Email, BirthDate, BaseSalary, DepartmentId)\n"
-					+ "		VALUES\n"
-					+ "		(?, ?, ?, ?, ?)", Statement.RETURN_GENERATED_KEYS);
-			
+			st = conn.prepareStatement(
+					"INSERT INTO seller\n" + "		(Name, Email, BirthDate, BaseSalary, DepartmentId)\n"
+							+ "		VALUES\n" + "		(?, ?, ?, ?, ?)",
+					Statement.RETURN_GENERATED_KEYS);
+
 			st.setString(1, sel.getName());
 			st.setString(2, sel.getEmail());
 			st.setDate(3, new java.sql.Date(sel.getBirthDate().getTime()));
 			st.setDouble(4, sel.getBaseSalary());
 			st.setInt(5, sel.getDepartment().getId());
-			
+
 			int rowsAffected = st.executeUpdate();
-			if(rowsAffected > 0) {
+			if (rowsAffected > 0) {
 				rs = st.getGeneratedKeys();
-				if(rs.next()) {
+				if (rs.next()) {
 					int id = rs.getInt(1);
 					sel.setId(id);
-				}
-				else {
+				} else {
 					throw new DbException("Erro inesperado, nenhuma linha afetada");
 				}
 			}
-			}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			throw new DbException(e.getMessage());
+		} finally {
+			DB.closeStatement(st);
 		}
 	}
 
 	@Override
 	public void update(Seller sel) {
-		// TODO A uto-generated method stub
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("UPDATE seller\n"
+					+ "SET Name = ?, Email = ?, BirthDate = ?, BaseSalary = ?, DepartmentId = ?\n" + "WHERE Id = ?",
+					Statement.RETURN_GENERATED_KEYS);
 
+			st.setString(1, sel.getName());
+			st.setString(2, sel.getEmail());
+			st.setDate(3, new java.sql.Date(sel.getBirthDate().getTime()));
+			st.setDouble(4, sel.getBaseSalary());
+			st.setInt(5, sel.getDepartment().getId());
+
+			st.setInt(6, sel.getId());
+
+			st.executeUpdate();
+
+		} catch (
+
+		SQLException e) {
+			throw new DbException(e.getMessage());
+		}
 	}
 
 	@Override
@@ -124,10 +143,9 @@ public class SellerDaoJDBC implements SellerDao {
 		try {
 			st = conn.prepareStatement(
 					"SELECT seller.*,department.Name as DepName " + "FROM seller INNER JOIN department "
-							+ "ON seller.DepartmentId = department.Id " +  "ORDER BY Name ",
+							+ "ON seller.DepartmentId = department.Id " + "ORDER BY Name ",
 					Statement.RETURN_GENERATED_KEYS);
 
-			
 			rs = st.executeQuery();
 			List<Seller> list = new ArrayList<>();
 			Map<Integer, Department> map = new HashMap<>();
