@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import db.DB;
+import db.DBIntegrityException;
 import db.DbException;
 import model.dao.SellerDao;
 import model.entities.Department;
@@ -85,8 +86,18 @@ public class SellerDaoJDBC implements SellerDao {
 
 	@Override
 	public void deleteById(Integer id) {
-		// TODO Auto-generated method stub
-
+		PreparedStatement st = null;
+		try {
+			st = conn.prepareStatement("DELETE FROM seller WHERE Id = ?");
+			st.setInt(1, id);
+			st.executeUpdate();
+		}
+		catch(SQLException e) {
+			throw new DBIntegrityException(e.getMessage());
+		}
+		finally {
+			DB.closeStatement(st);
+		}
 	}
 
 	@Override
